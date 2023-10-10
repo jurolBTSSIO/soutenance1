@@ -77,11 +77,11 @@ public class GUImofifierStock implements FormulaireInt {
      */
     @Override
     public void submit(Formulaire form, String nom) {
-        form.fermer();
         // Je créé un nouveau formulaire et la méthode modifierStock
         // Retourne le produit choisi que je passe en paramètre
         try {
             new GUIModifierQuantitetock(panelPP, this.site, site.modifierStock(form));
+            form.fermer();
         } catch (CommandeNullException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }

@@ -47,8 +47,31 @@ public class GUIModifierQuantitetock implements FormulaireInt {
      */
     @Override
     public void submit(Formulaire form, String nom) {
-        this.produit.setQuantite(Integer.parseInt(form.getValeurChamp("NOUV_QUANTITE")));
-        JOptionPane.showMessageDialog(form.getPanel(),"Modification enregistrée");
-        form.fermer();
+
+        // Gestion de la saisie de la nouvelle quantité
+        try {
+            String nouvelleQuantiteStr = form.getValeurChamp("NOUV_QUANTITE");
+
+            // Je teste la saisie de la nouvelle quantité
+            if (nouvelleQuantiteStr.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Saisir une quantité");
+            } else {
+                this.produit.setQuantite(Integer.parseInt(nouvelleQuantiteStr));
+                JOptionPane.showMessageDialog(form.getPanel(), "Modification enregistrée");
+                form.fermer();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "La saisie n'est pas un nombre entier !");
+        }
+    }
+
+    // Méthode utilitaire pour vérifier si une chaîne de caractères peut être convertie en entier
+    private boolean estEntier(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
