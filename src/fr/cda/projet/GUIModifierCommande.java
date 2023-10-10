@@ -3,6 +3,7 @@ package fr.cda.projet;
 import fr.cda.ihm.Formulaire;
 import fr.cda.ihm.FormulaireInt;
 import fr.cda.util.CommandeNullException;
+import fr.cda.util.SaisieIncorrectException;
 import fr.cda.util.Site;
 
 import javax.swing.*;
@@ -79,21 +80,21 @@ public class GUIModifierCommande implements FormulaireInt {
      * @param nom Le nom du bouton qui a ete utilise.
      */
     @Override
-    public void submit(Formulaire form, String nom) {
+    public void submit(Formulaire form, String nom)  {
         ArrayList<String> nouvellesReferences = new ArrayList<>();
-
-        // Si la commande n'est pas livree
-        if (!commandeAModifier.isLivre()) {
 
             // Je boucle sur les references et je split pour changer la quantite
             for (String reference : commandeAModifier.getReferences()) {
                 String[] champs = reference.split("=", 2);
-                nouvellesReferences.add(champs[0] + "=" + form.getValeurChamp(reference));
+
+                // Teste de la saisie des chaps du formulaire
+                if (form.getValeurChamp(reference) == null || form.getValeurChamp(reference).isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "La sasie est incorrect!");
+                } else {
+                    nouvellesReferences.add(champs[0] + "=" + form.getValeurChamp(reference));
+                }
             }
             commandeAModifier.setReferences(nouvellesReferences);
-        } else {
-            JOptionPane.showMessageDialog(form.getPanel(),"La commande a deja ete livree");
-        }
         // Je ferme la fenetre
         form.fermer();
     }

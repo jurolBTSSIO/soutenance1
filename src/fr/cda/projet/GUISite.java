@@ -2,6 +2,7 @@ package fr.cda.projet;
 
 import fr.cda.ihm.*;
 import fr.cda.util.CommandeNullException;
+import fr.cda.util.SaisieIncorrectException;
 import fr.cda.util.Site;
 import fr.cda.util.Terminal;
 
@@ -93,14 +94,14 @@ public class GUISite implements FormulaireInt
                 int num = 0;
                 try {
                     num = Integer.parseInt(numStr);
-                    // Utiliser 'num' ici
+                    numeroCommande = num;
+                    String res = site.listerCommande(num);
+                    form.setValeurChamp("RESULTATS", res);
                 } catch (NumberFormatException e) {
                     // Gérer l'exception, par exemple, afficher un message d'erreur à l'utilisateur
                     JOptionPane.showMessageDialog(form.getPanel(), "Le numéro de commande n'est pas valide.");
                 }
-                numeroCommande = num;
-                String res = site.listerCommande(num);
-                form.setValeurChamp("RESULTATS", res);
+
             }
         // Livraison des commandes
         if (nomSubmit.equals("LIVRER")) {

@@ -1,5 +1,7 @@
 package fr.cda.ihm;
 
+import fr.cda.util.SaisieIncorrectException;
+
 /** Interface d'utilisation d'un formulaire.<br>
     L'applicatif passer en parametre du formulaire doit
     implementer cette interface. */
@@ -11,5 +13,5 @@ public interface FormulaireInt
         @param form Le formulaire dans lequel se trouve le bouton
         @param nom Le nom du bouton qui a ete utilise.
      */
-    public void     submit(Formulaire form,String nom);
+    public void submit(Formulaire form,String nom);
 }

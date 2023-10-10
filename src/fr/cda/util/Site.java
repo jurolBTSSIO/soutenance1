@@ -383,6 +383,17 @@ public class Site {
         return produitChoisi;
     }
 
+    /**
+     * Méthode qui ajoute une reference à une arrayList de references
+     * @param reference
+     * @return
+     */
+    public ArrayList<String> ajouterReference(String reference) {
+        ArrayList<String> nouvellesReferences = new ArrayList<>();
+        nouvellesReferences.add(reference);
+        return nouvellesReferences;
+    }
+
     //----------------------------------- SETTERS ET GETTERS----------------------------------------------------->
     public ArrayList<Produit> getStock() {
         return stock;

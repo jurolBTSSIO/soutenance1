@@ -2,7 +2,10 @@ package fr.cda.projet;
 
 import fr.cda.ihm.Formulaire;
 import fr.cda.ihm.FormulaireInt;
+import fr.cda.util.CommandeNullException;
 import fr.cda.util.Site;
+
+import javax.swing.*;
 
 /**
  * Classe GUIModifierStock
@@ -77,6 +80,10 @@ public class GUImofifierStock implements FormulaireInt {
         form.fermer();
         // Je créé un nouveau formulaire et la méthode modifierStock
         // Retourne le produit choisi que je passe en paramètre
-        new GUIModifierQuantite(panelPP, this.site, site.modifierStock(form));
+        try {
+            new GUIModifierQuantitetock(panelPP, this.site, site.modifierStock(form));
+        } catch (CommandeNullException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 }
