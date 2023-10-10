@@ -1,0 +1,8 @@
+1;21/09/2022;Macron Brigitte;true;LIVRE-1=1
+1;21/09/2022;Macron Brigitte;true;LIVRE-2=2
+1;21/09/2022;Macron Brigitte;true;VETEMENT-1=3
+2;22/09/2022;Chirac Bernadette;false;VETEMENT-2=4
+2;22/09/2022;Chirac Bernadette;false;VETEMENT-3=7
+2;22/09/2022;Chirac Bernadette;false;LIVRE-3=7
+3;23/09/2022;Martin Jacques;false;LIVRE-1=8
+4;23/09/2022;Bruni Carla;false;LIVRE-1=9

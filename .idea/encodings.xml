@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/data/Produits.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/ihm/AdaptaterControlesCanvasIHM.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/ihm/CanvasIHM.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/ihm/ControlesCanvasIHM.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/ihm/Formulaire.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/ihm/FormulaireException.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/ihm/FormulaireInt.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/Commande.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/GUIModifierCommande.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/GUIModifierQuantite.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/GUISite.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/GUImofifierStock.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/IHMSite.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/Produit.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/projet/Projet.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/fr/cda/util/Terminal.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
