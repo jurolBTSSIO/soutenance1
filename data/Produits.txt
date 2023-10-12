@@ -7,5 +7,5 @@ LIVRE-3;Le Père Goriot de Honoré de Balzac;11.0;5
 LIVRE-4;L'étranger de Albert Camus;11.0;5
 LIVRE-5;Voyage au bout de la nuit de Louis-ferdinand Céline;11.0;3
 BD-1;Tintin au Tibet;11.5;2
-BD-2;Spirou et Fantasio;11.5;2
-BD-3;Corto Maltese;11.5;0
+BD-2;Spirou et Fantasio;11.5;5
+BD-3;Corto Maltese;11.5;5

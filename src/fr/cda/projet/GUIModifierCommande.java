@@ -7,6 +7,7 @@ import fr.cda.util.SaisieIncorrectException;
 import fr.cda.util.Site;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -82,20 +83,24 @@ public class GUIModifierCommande implements FormulaireInt {
     @Override
     public void submit(Formulaire form, String nom)  {
         ArrayList<String> nouvellesReferences = new ArrayList<>();
-
+        // Teste la saisie
+        try {
             // Je boucle sur les references et je split pour changer la quantite
             for (String reference : commandeAModifier.getReferences()) {
                 String[] champs = reference.split("=", 2);
 
                 // Teste de la saisie des chaps du formulaire
                 if (form.getValeurChamp(reference) == null || form.getValeurChamp(reference).isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "La sasie est incorrect!");
+                    JOptionPane.showMessageDialog(null, "La saisie est incorrect!");
                 } else {
                     nouvellesReferences.add(champs[0] + "=" + form.getValeurChamp(reference));
                 }
             }
             commandeAModifier.setReferences(nouvellesReferences);
-        // Je ferme la fenetre
-        form.fermer();
+            // Je ferme la fenetre
+            form.fermer();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "La saisie n'est pas un nombre entier !");
+        }
     }
 }

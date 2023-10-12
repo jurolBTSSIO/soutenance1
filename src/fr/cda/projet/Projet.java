@@ -13,10 +13,14 @@ import java.io.IOException;
 //
 public class Projet
 {
-    public static void main(String a_args[]) throws IOException {
+    public static void main(String a_args[]) throws IOException, NomFichierIncorrectException {
         Terminal.ecrireStringln("Execution du projet ");
-
-        Site site = new Site();
-        GUISite ihm = new GUISite(site);
+        // creation d'un nouveau site
+        try {
+            Site site = new Site();
+            GUISite ihm = new GUISite(site);
+        } catch (NomFichierIncorrectException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -18,7 +18,7 @@ public class Site {
     /**
      * Constructeur
      */
-    public Site() {
+    public Site() throws NomFichierIncorrectException {
         this.stock = new ArrayList<Produit>();
         this.commandes = new ArrayList<Commande>();
 
@@ -31,6 +31,77 @@ public class Site {
             initialiserCommandes("data/Commandes.txt");
         } catch (NomFichierIncorrectException e) {
             e.fillInStackTrace();
+        }
+    }
+    /**
+     * Chargement du fichier de stock
+     *
+     * @param nomFichier
+     */
+    private void initialiserStock(String nomFichier) throws NomFichierIncorrectException {
+
+        if (nomFichier == null || nomFichier.isEmpty()) {
+            throw new NomFichierIncorrectException("Le nom de fichier n'est pas correct.");
+        }
+
+        String[] lignes = Terminal.lireFichierTexte(nomFichier);
+
+        // On boucle sur les ligne du fichier Produit.txt
+        for (String ligne : lignes) {
+            System.out.println(ligne);
+            String[] champs = ligne.split("[;]", 4);
+            String reference = champs[0];
+            String nom = champs[1];
+            double prix = Double.parseDouble(champs[2]);
+            int quantite = Integer.parseInt(champs[3]);
+            Produit p = new Produit(reference,
+                    nom,
+                    prix,
+                    quantite
+            );
+            stock.add(p);
+        }
+    }
+    /**
+     * Chargement du fichier Commandes.txt
+     *
+     * @param nomFichier
+     */
+    private void initialiserCommandes(String nomFichier) throws NomFichierIncorrectException {
+        // Je teste si le fichier existe
+        if (nomFichier == null || nomFichier.isEmpty()) {
+            throw new NomFichierIncorrectException("Le nom de fichier n'est pas correct.");
+        }
+        // Je lis le fichier
+        String[] lignes = Terminal.lireFichierTexte(nomFichier);
+        // Je créé le tableau de références
+        ArrayList<String> references;
+        Commande commande = null;
+
+        // On boucle sur les lignes du fichier Commandes.txt
+        try {
+            for (String ligne : lignes) {
+                // Je split le fichier par le ";"
+                String[] champs = ligne.split(";", 5);
+                // J'initialise chaque varialble
+                int numero = Integer.parseInt(champs[0]);
+                String date = champs[1];
+                String client = champs[2];
+                boolean isLivre = Boolean.parseBoolean(champs[3]);
+                references = new ArrayList<>();
+                references.add(champs[4]);
+
+                // On teste si la commande existe, si elle existe on ajoute une reference,
+                // sinon on cree une nouvelle commande
+                if (!isCommandeExist(numero)) {
+                    commande = new Commande(numero, date, client, isLivre, references);
+                    this.commandes.add(commande);
+                } else {
+                    commande.getReferences().add(champs[4]);
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -57,6 +128,119 @@ public class Site {
         return isExist;
     }
 
+    /**
+     * Methode qui retourne sous la forme d'une chaine de caractere
+     * tous les produits du stock
+     *
+     * @return
+     */
+    public String listerTousProduits() {
+        StringBuilder res = new StringBuilder();
+        // Je boucle sur le stock
+        for (Produit prod : this.stock)
+            res.append(prod.toString()).append("\n");
+
+        return res.toString();
+    }
+
+    /**
+     * Méthode qui liste tous les produits
+     * pour la sauvegarde
+     *
+     * @return
+     */
+    public String listerTousProduitsSauvegarde() {
+        StringBuilder res = new StringBuilder();
+
+        for (Produit prod : this.stock)
+            res.append(prod.toStringSauvegarde()).append("\n");
+        return res.toString();
+    }
+
+    /**
+     * Methode qui retourne sous la forme d'une chaine de caractere  toutes les commandes
+     *
+     * @return
+     */
+    public String listerToutesCommandes() {
+        // Je cree un stringbuilder
+        StringBuilder resultat = new StringBuilder();
+        // Je boucle sur les commandes
+        for (Commande commande : this.commandes) {
+            resultat.append(commande.toString()).append("\n");
+            resultat.append("===================================================================== \n");
+        }
+        return resultat.toString();
+    }
+
+    /**
+     * Deuxième méthode pour lister les commandes et les sauvegarder
+     *
+     * @return
+     */
+    public String listerToutesCommandesSauvegarde() {
+        // Je cree un stringbuilder
+        StringBuilder resultat = new StringBuilder();
+        // Je boucle sur les commandes
+        for (Commande commande : this.commandes) {
+
+            // Je boucle sur les references
+            for (String reference : commande.getReferences()) {
+                resultat.append(commande._toString()).append(reference).append("\n");
+            }
+        }
+        return resultat.toString();
+    }
+
+    /**
+     * Methode qui retourne sous la forme d'une chaine de caractere une commande
+     *
+     * @param numero
+     * @return
+     */
+    public String listerCommande(int numero) {
+        String res = "";
+
+        // Je boucle sur les commandes
+        for (Commande commande : this.commandes) {
+
+            // Et si le numero passe en parametre est egal au numero de la commande
+            // Je le concatene a la string
+            if (commande.getNumero() == numero) {
+                res = res + commande;
+                break;
+            }
+        }
+        // Si le numero de commande n'existe pas
+        if (res == "") {
+            JOptionPane.showMessageDialog(null, "La commande n'éxiste pas!");
+        }
+        return res;
+    }
+
+    /**
+     * Methode qui retourne une commande par son numéro
+     *
+     * @param numero
+     * @return
+     */
+    public Commande retounerCommande(int numero) throws CommandeNullException {
+        Commande commandeChoisie = null;
+        for (Commande commande : this.commandes) {
+
+            if (commande.getNumero() == numero) {
+                commandeChoisie = commande;
+                break;
+            }
+        }
+        if (commandeChoisie == null) {
+            throw new CommandeNullException("La commande n'existe pas!");
+        }
+        if (commandeChoisie.isLivre()) {
+            throw new CommandeNullException("La commande est deja livrée!");
+        }
+        return commandeChoisie;
+    }
     /**
      * Methode qui livre la commande
      *
@@ -98,129 +282,13 @@ public class Site {
                     commande.setRaisons(raisons);
                 }
 
-                // Si la commande n'est pas valide j'impl�mente le Stringbuilder
+                // Si la commande n'est pas valide j'implemente le Stringbuilder
                 if (!commande.isLivre()) {
                     retour.append(commande).append(commande.getRaisons()).append("===================================================== \n");
                 }
             }
         }
         return retour.toString();
-    }
-
-    /**
-     * Methode qui retourne sous la forme d'une chaine de caractere
-     * tous les produits du stock
-     *
-     * @return
-     */
-    public String listerTousProduits() {
-        StringBuilder res = new StringBuilder();
-        // Je boucle sur le stock
-        for (Produit prod : this.stock)
-            res.append(prod.toString()).append("\n");
-
-        return res.toString();
-    }
-
-    /**
-     * Méthode qui liste tous les produits
-     * pour la sauvegarde
-     *
-     * @return
-     */
-    public String _listerTousProduits() {
-        StringBuilder res = new StringBuilder();
-
-        for (Produit prod : this.stock)
-            res.append(prod._toString()).append("\n");
-        return res.toString();
-    }
-
-    /**
-     * Methode qui retourne sous la forme d'une chaine de caractere  toutes les commandes
-     *
-     * @return
-     */
-    public String listerToutesCommandes() {
-        // Je cree un stringbuilder
-        StringBuilder resultat = new StringBuilder();
-        // Je boucle sur les commandes
-        for (Commande commande : this.commandes) {
-            resultat.append(commande.toString()).append("\n");
-            resultat.append("===================================================================== \n");
-        }
-        return resultat.toString();
-    }
-
-    /**
-     * Deuxième méthode pour lister les commandes et les sauvegarder
-     *
-     * @return
-     */
-    public String _listerToutesCommandes() {
-        // Je cree un stringbuilder
-        StringBuilder resultat = new StringBuilder();
-        // Je boucle sur les commandes
-        for (Commande commande : this.commandes) {
-
-            // Je boucle sur les references
-            for (String reference : commande.getReferences()) {
-                resultat.append(commande._toString()).append(reference).append("\n");
-            }
-        }
-        return resultat.toString();
-    }
-
-    /**
-     * Methode qui retourne sous la forme d'une chaine de caractere une commande
-     *
-     * @param numero
-     * @return
-     */
-    public String listerCommande(int numero) {
-        String res = "";
-
-        // Je boucle sur les commandes
-        for (Commande commande : this.commandes) {
-
-            // Et si le numero passe en parametre est egal au numero de la commande
-            // Je le concatene a la string
-            if (commande.getNumero() == numero) {
-                res = res + "Numero de commande : " + numero + "\n";
-                res = res + "====================================\n";
-                res = res + commande;
-                break;
-            }
-        }
-        // Si le numero de commande n'existe pas
-        if (res == "") {
-            JOptionPane.showMessageDialog(null, "La commande n'éxiste pas!");
-        }
-        return res;
-    }
-
-    /**
-     * Methode qui retourne une commande par son numéro
-     *
-     * @param numero
-     * @return
-     */
-    public Commande retounerCommande(int numero) throws CommandeNullException {
-        Commande commandeChoisie = null;
-        for (Commande commande : this.commandes) {
-
-            if (commande.getNumero() == numero) {
-                commandeChoisie = commande;
-                break;
-            }
-        }
-        if (commandeChoisie == null) {
-            throw new CommandeNullException("La commande n'existe pas!");
-        }
-        if (commandeChoisie.isLivre()) {
-            throw new CommandeNullException("La commande est deja livrée!");
-        }
-        return commandeChoisie;
     }
 
     /**
@@ -246,6 +314,7 @@ public class Site {
                     String[] champs = reference.split("=", 2);
                     int quantite = Integer.parseInt(champs[1].trim());
                     System.out.println(champs[1] + "rere");
+
                     // Je boucle sur les produit
                     for (Produit produit : this.stock) {
 
@@ -285,82 +354,13 @@ public class Site {
     }
 
     /**
-     * Chargement du fichier Commandes.txt
-     *
-     * @param nomFichier
-     */
-    private void initialiserCommandes(String nomFichier) throws NomFichierIncorrectException {
-        if (nomFichier == null || nomFichier.isEmpty())
-            throw new NomFichierIncorrectException("Le nom de fichier n'est pas correct.");
-        {
-            // Je lis le fichier
-            String[] lignes = Terminal.lireFichierTexte(nomFichier);
-            // Je créé le tableau de références
-            ArrayList<String> references;
-            Commande commande = null;
-
-            // On boucle sur les lignes du fichier Commandes.txt
-            for (String ligne : lignes) {
-                // Je split le fichier par le ";"
-                String[] champs = ligne.split(";", 5);
-                // J'initialise chaque varialble
-                int numero = Integer.parseInt(champs[0]);
-                String date = champs[1];
-                String client = champs[2];
-                boolean isLivre = Boolean.parseBoolean(champs[3]);
-                references = new ArrayList<>();
-                references.add(champs[4]);
-
-                // On teste si la commande existe, si elle existe on ajoute une reference,
-                // sinon on cree une nouvelle commande
-                if (!isCommandeExist(numero)) {
-                    commande = new Commande(numero, date, client, isLivre, references);
-                    this.commandes.add(commande);
-                } else {
-                    assert commande != null;
-                    commande.getReferences().add(champs[4]);
-                }
-            }
-        }
-    }
-
-    /**
      * Je créé une méthode pour sauvegarder
      */
     public void sauvegarder() {
-        StringBuffer stringBuffer1 = new StringBuffer(this._listerTousProduits());
-        StringBuffer stringBuffer2 = new StringBuffer(this._listerToutesCommandes());
+        StringBuffer stringBuffer1 = new StringBuffer(this.listerTousProduitsSauvegarde());
+        StringBuffer stringBuffer2 = new StringBuffer(this.listerToutesCommandesSauvegarde());
         Terminal.ecrireFichier("data/Commandes.txt", stringBuffer2);
         Terminal.ecrireFichier("data/Produits.txt", stringBuffer1);
-    }
-    /**
-     * Chargement du fichier de stock
-     *
-     * @param nomFichier
-     */
-    private void initialiserStock(String nomFichier) throws NomFichierIncorrectException {
-
-        if (nomFichier == null || nomFichier.isEmpty()) {
-            throw new NomFichierIncorrectException("Le nom de fichier n'est pas correct.");
-        }
-
-        String[] lignes = Terminal.lireFichierTexte(nomFichier);
-
-        // On boucle sur les ligne du fichier Produit.txt
-        for (String ligne : lignes) {
-                System.out.println(ligne);
-                String[] champs = ligne.split("[;]", 4);
-                String reference = champs[0];
-                String nom = champs[1];
-                double prix = Double.parseDouble(champs[2]);
-                int quantite = Integer.parseInt(champs[3]);
-                Produit p = new Produit(reference,
-                        nom,
-                        prix,
-                        quantite
-                );
-                stock.add(p);
-        }
     }
 
     /**
